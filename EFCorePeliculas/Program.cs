@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using EFCorePeliculas;
 using Microsoft.EntityFrameworkCore;
 
@@ -5,14 +6,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(opciones => 
+    opciones.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+    
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(opciones => 
-    opciones.UseSqlServer(connectionString,
-    sqlServer => sqlServer.UseNetTopologySuite()));
+{
+    opciones.UseSqlServer(connectionString, sqlServer => sqlServer.UseNetTopologySuite());
+    opciones.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    // opciones.UseLazyLoadingProxies();
+});
+    
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 

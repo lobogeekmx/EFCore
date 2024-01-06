@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using EFCorePeliculas.Entidades;
+using EFCorePeliculas.Entidades.Seeding;
 using Microsoft.EntityFrameworkCore;
 
 namespace EFCorePeliculas
@@ -26,6 +27,8 @@ namespace EFCorePeliculas
             base.OnModelCreating(modelBuilder);
             
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            SeedingModuloConsulta.Seed(modelBuilder);
 
             //Seteo de PK
             //modelBuilder.Entity<Genero>().HasKey(prop => prop.Id); 
